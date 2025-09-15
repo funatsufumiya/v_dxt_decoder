@@ -1,9 +1,5 @@
 module dxt_decoder
 
-import decode_bc1
-import decode_bc2
-import decode_bc3
-
 pub enum DxtFormat {
 	dxt1
 	dxt2
@@ -12,7 +8,7 @@ pub enum DxtFormat {
 	dxt5
 }
 
-pub fn decode(image_data []byte, width int, height int, format DxtFormat) ![]u8 {
+pub fn decode(image_data []u8, width int, height int, format DxtFormat) ![]u8 {
 	match format {
 		.dxt1 {
 			return decode_bc1(image_data, width, height)

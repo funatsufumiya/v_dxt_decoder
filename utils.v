@@ -1,10 +1,10 @@
-module utils
+module dxt_decoder
 
-pub fn lerp(v1 f32, v2 f32, r f32) f32 {
+fn lerp(v1 f32, v2 f32, r f32) f32 {
 	return v1 * (1.0 - r) + v2 * r
 }
 
-pub fn convert_565_to_rgb(val u16) [3]u8 {
+fn convert_565_to_rgb(val u16) []u8 {
 	r := ((val >> 11) & 31)
 	g := ((val >> 5) & 63)
 	b := (val & 31)
@@ -15,15 +15,15 @@ pub fn convert_565_to_rgb(val u16) [3]u8 {
 	]
 }
 
-pub fn get_u16_le(data []byte, offset int) u16 {
+fn get_u16_le(data []u8, offset int) u16 {
 	return u16(data[offset]) | (u16(data[offset+1]) << 8)
 }
 
-pub fn get_u32_le(data []byte, offset int) u32 {
+fn get_u32_le(data []u8, offset int) u32 {
 	return u32(data[offset]) | (u32(data[offset+1]) << 8) | (u32(data[offset+2]) << 16) | (u32(data[offset+3]) << 24)
 }
 
-pub fn extract_bits_from_u16_array(array []u16, shift int, length int) u32 {
+fn extract_bits_from_u16_array(array []u16, shift int, length int) u32 {
 	height := array.len
 	heightm1 := height - 1
 	width := 16
@@ -41,7 +41,7 @@ pub fn extract_bits_from_u16_array(array []u16, shift int, length int) u32 {
 	}
 }
 
-pub fn interpolate_color_values(first_val u16, second_val u16, is_dxt1 bool) []u8 {
+fn interpolate_color_values(first_val u16, second_val u16, is_dxt1 bool) []u8 {
 	first_color := convert_565_to_rgb(first_val)
 	second_color := convert_565_to_rgb(second_val)
 	mut color_values := []u8{}
@@ -68,7 +68,7 @@ pub fn interpolate_color_values(first_val u16, second_val u16, is_dxt1 bool) []u
 	return color_values
 }
 
-pub fn interpolate_alpha_values(first_val u8, second_val u8) []u8 {
+fn interpolate_alpha_values(first_val u8, second_val u8) []u8 {
 	mut alpha_values := [first_val, second_val]
 	if first_val > second_val {
 		for i in 1 .. 7 {
@@ -84,8 +84,8 @@ pub fn interpolate_alpha_values(first_val u8, second_val u8) []u8 {
 	return alpha_values
 }
 
-pub fn multiply(component u8, multiplier f32) u8 {
-	if !isfinite(multiplier) || multiplier == 0.0 {
+fn multiply(component u8, multiplier f32) u8 {
+	if multiplier == 0.0 {
 		return 0
 	}
 	return u8(f32(component) * multiplier + 0.5)

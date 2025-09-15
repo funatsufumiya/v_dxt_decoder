@@ -1,8 +1,6 @@
-module decode_bc1
+module dxt_decoder
 
-import utils
-
-pub fn decode_bc1(image_data []byte, width int, height int) []u8 {
+pub fn decode_bc1(image_data []u8, width int, height int) []u8 {
 	mut rgba := []u8{len: width * height * 4, init: 0}
 	height_4 := height / 4
 	width_4 := width / 4
@@ -10,10 +8,10 @@ pub fn decode_bc1(image_data []byte, width int, height int) []u8 {
 
 	for h in 0 .. height_4 {
 		for w in 0 .. width_4 {
-			c0 := utils.get_u16_le(image_data, offset)
-			c1 := utils.get_u16_le(image_data, offset + 2)
-			color_values := utils.interpolate_color_values(c0, c1, true)
-			color_indices := utils.get_u32_le(image_data, offset + 4)
+			c0 := get_u16_le(image_data, offset)
+			c1 := get_u16_le(image_data, offset + 2)
+			color_values := interpolate_color_values(c0, c1, true)
+			color_indices := get_u32_le(image_data, offset + 4)
 
 			for y in 0 .. 4 {
 				for x in 0 .. 4 {
