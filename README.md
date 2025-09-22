@@ -2,6 +2,8 @@
 
 V-lang port of https://github.com/kchapelier/decode-dxt
 
+CPU DXT texture decoder.
+
 > [!WARNING]
 > V-lang port was mostly done by GitHub Copilot. Use with care.
 
